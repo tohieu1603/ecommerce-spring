@@ -6,7 +6,7 @@ Hệ thống e-commerce xây dựng bằng Spring Boot, tổ chức theo dạng 
 
 | Module | Mô tả |
 | --- | --- |
-| `auth-service` | Service xác thực & phân quyền người dùng |
+| `auth-service` | Service xác thực & phân quyền người dùng,  |
 | `common` | Module dùng chung (DTO, API response, tiện ích) |
 
 ## Yêu cầu

@@ -1,9 +1,10 @@
 package com.example.auth_service.domain.models.user.exceptions;
 
 import com.example.auth_service.domain.shared.DomainException;
+import com.hieu.common.error.ErrorCode;
 
 public final class InvalidCredentialsException extends DomainException{
     public InvalidCredentialsException() {
-        super("AUTH-0005", "Invalid username or password");
+        super(ErrorCode.INVALID_CREDENTIALS.code(), "Invalid username or password");
     }
 }
