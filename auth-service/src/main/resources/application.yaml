@@ -1,0 +1,141 @@
+spring:
+  config:
+    import:
+      - optional:file:.env[.properties]
+  application:
+    name: auth-service
+  threads:
+    virtual:
+      enabled: true
+
+  grpc:
+    server:
+      port: ${GRPC_PORT:9091}
+
+  data:
+    redis:
+      host: ${REDIS_PORT:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      connect-timeout: 2000ms
+
+  kafka:
+    bootstrap-servers:
+      - ${KAFKA_BOOTSTRAP:localhost:9092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: auth-service
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.trusted.packages: "com.hieu.auth_service.application.events,com.hieu.*"
+    listener:
+      missing-topics-fatal: false
+  datasource:
+    driver-class-name: ${DB_DRIVER:org.postgresql.Driver}
+    url: ${DB_URL:jdbc:postgresql://localhost:5433/authdb}
+    username: ${DB_USER:authuser}
+    password: ${DB_PASSWORD:authpass}
+
+  jpa:
+    database-platform: ${JPA_DIALECT:org.hibernate.dialect.PostgreSQLDialect}
+    hibernate:
+      # Flyway owns the schema. Hibernate only validates — catches drift between
+      # JPA entities and real tables in CI. Dev on H2 uses `create-drop` via profile.
+      ddl-auto: ${JPA_DDL:validate}
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+  flyway:
+    enabled: ${FLYWAY_ENABLED:true}
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+
+server:
+  port: ${SERVER_PORT:8081}
+
+# ── JWT configuration (bound to JwtProperties record) ──
+jwt:
+  # C1 (relaxed for local dev): require JWT_SECRET in prod via @Profile guard.
+  # Default value is a 64-char dev-only secret that passes the 32-char minimum check.
+  # In production, override with: export JWT_SECRET=<32+ random chars>
+  # MUST match all other services (api-gateway etc) for JWT signature verification.
+  secret: ${JWT_SECRET:change-me-change-me-change-me-change-me-please-32chars}
+  access-expiration-seconds: ${JWT_ACCESS_TTL:900}       # 15 minutes
+  refresh-expiration-days: ${JWT_REFRESH_TTL_DAYS:7}     # 7 days
+  issuer: ${JWT_ISSUER:hieu.com}
+
+# ── Google "Login with Google" — same client ID FE and BE share ──
+# Set this in .env / prod env from the OAuth 2.0 Client (Web) created on
+# console.cloud.google.com. The frontend uses the same value to mint ID tokens
+# via Google Identity Services; the backend uses it to verify the audience.
+google:
+  oauth:
+    client-id: ${GOOGLE_CLIENT_ID:}
+
+# ── OpenAPI / Swagger ──
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+    operations-sorter: method
+    tags-sorter: alpha
+
+# ── Actuator ──
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: when-authorized
+
+# ── Eureka service discovery ──
+# URL embeds basic-auth creds so the client registers/fetches without extra config.
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URL:http://admin:admin123@localhost:8761/eureka/}
+    register-with-eureka: true
+    fetch-registry: true
+  instance:
+    prefer-ip-address: true
+
+# ── Cookie-based auth ──
+# Browser clients get HttpOnly cookies instead of raw tokens. Set secure=true in prod
+# (requires HTTPS); dev defaults to false so cookies survive plain http://localhost.
+auth:
+  cookie:
+    # Default true so prod (HTTPS) is safe by default. Local dev (plain http://localhost)
+    # must explicitly set AUTH_COOKIE_SECURE=false in .env to receive cookies.
+    secure: ${AUTH_COOKIE_SECURE:true}
+    same-site: ${AUTH_COOKIE_SAME_SITE:Lax}
+
+# ── Rate limiting (Redis-backed, per-IP) ──
+# Tune these without rebuilding. Defaults match the previous hard-coded values.
+# Whitelist bypasses rate limit entirely — use sparingly (monitoring, load tests).
+rate-limit:
+  login:
+    limit: ${RATE_LIMIT_LOGIN:5}
+    window: ${RATE_LIMIT_LOGIN_WINDOW:1m}
+  register:
+    limit: ${RATE_LIMIT_REGISTER:3}
+    window: ${RATE_LIMIT_REGISTER_WINDOW:1m}
+  whitelist:
+    - 127.0.0.1
+    - 0:0:0:0:0:0:0:1
+
+# ── Logging ──
+logging:
+  level:
+    com.hieu.auth_service: DEBUG
+    org.springframework.security: INFO
+    org.hibernate.SQL: WARN
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} %-5level [%thread] %logger{30} - %msg%n"

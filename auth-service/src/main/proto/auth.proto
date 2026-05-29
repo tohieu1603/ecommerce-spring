@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+package hieu.auth.v1;
+
+option java_multiple_files = true;
+option java_package = "com.example.auth_service.interfaces.grpc.proto";
+option java_outer_classname = "AuthProto";
+
+service AuthService {
+  rpc VerifyToken(VerifyTokenRequest) returns (VerifyTokenResponse);
+
+  rpc CheckRole(CheckRoleRequest) returns (CheckRoleResponse);
+
+  rpc CheckPermission(CheckPermissionRequest) returns (CheckPermissionResponse);
+
+  rpc GetUser(GetUserRequest) returns (GetUserResponse);
+}
+
+message VerifyTokenRequest {
+  string access_token = 1;
+}
+
+message VerifyTokenResponse {
+  bool valid = 1;
+  string user_id = 2;
+  string username = 3;
+  int32 token_version = 4;
+  repeated string role = 5;
+}
+
+message CheckRoleRequest {
+  string user_id = 1;
+  string role_name = 2;
+}
+
+message CheckRoleResponse {
+  bool has_role = 1;
+}
+
+message CheckPermissionRequest {
+  string user_id = 1;
+  string role_name = 2;
+}
+
+message CheckPermissionResponse {
+  bool allowed = 1;
+}
+
+message GetUserRequest {
+  string user_id = 1;
+}
+
+message GetUserResponse {
+  bool   found      = 1;
+  string user_id    = 2;
+  string username   = 3;
+  string email      = 4;
+  bool   active     = 5;
+  repeated string roles       = 6;
+  repeated string permissions = 7;
+}

@@ -1,0 +1,27 @@
+package com.example.auth_service.domain.models.user.events;
+
+import com.example.auth_service.domain.events.DomainEvent;
+
+public final class PasswordChangeEvent extends DomainEvent{
+    private final String userId;
+    private final String username;
+
+    public PasswordChangeEvent(String userId, String username) {
+        this.userId = userId;
+        this.username = username;
+    }
+
+    @Override
+    public String aggregateId() {
+        return userId;
+    }
+
+    public String userId() {
+        return userId;
+    }
+
+    public String username() {
+        return username;
+    }
+    
+}
