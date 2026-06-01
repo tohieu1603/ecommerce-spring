@@ -1,6 +1,6 @@
 # ecommerce-spring
 
-Hệ thống e-commerce xây dựng bằng Spring Boot, tổ chức theo dạng multi-module.
+Hệ thống e-commerce xây dựng bằng Spring Boot, với mô hình microservice, 
 
 ## Modules
 
