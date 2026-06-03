@@ -6,6 +6,9 @@ import org.springframework.context.annotation.Configuration;
 
 import com.example.auth_service.domain.services.TokenDomainService;
 import com.example.auth_service.infrastructure.security.JwtProperties;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 /**
  * Registers framework-free domain services as Spring beans.
@@ -24,5 +27,13 @@ public class DomainServiceConfig {
     @Bean
     public TokenDomainService tokenDomainService() {
         return new TokenDomainService();
+    }
+
+    @Bean
+    public ObjectMapper objectMapper() {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        return mapper;
     }
 }

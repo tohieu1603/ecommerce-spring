@@ -51,11 +51,12 @@ public class UserMapper {
                 .accountNonLocked(user.getAccountStatus().accountNonLocked())
                 .credentialsNonExpired(user.getAccountStatus().credentialsNonExpired())
                 .lastLogin(user.getAccountStatus().lastLogin())
-                .tokenVersions(user.getTokenVersion())
+                .tokenVersion(user.getTokenVersion())
                 .googleSub(user.getGoogleSub() != null ? user.getGoogleSub().value() : null)
                 .createdAt(user.getCreatedAt())
                 .updatedAt(user.getUpdatedAt())
                 .roles(roles)
+                .isNew(isNew)
                 .build();
     }
     public User toDomain(UserJpaEntity user) {

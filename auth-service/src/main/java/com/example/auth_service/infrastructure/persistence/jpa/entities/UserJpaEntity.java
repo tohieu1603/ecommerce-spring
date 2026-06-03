@@ -83,7 +83,7 @@ public class UserJpaEntity extends BaseManualIdEntity{
         this.accountNonLocked = accountNonLocked;
         this.credentialsNonExpired = credentialsNonExpired;
         this.lastLogin = lastLogin;
-        this.tokenVersions = tokenVersions;
+        this.tokenVersions = tokenVersion;
         this.googleSub = googleSub;
         this.roles = roles != null ? roles : new HashSet<>();
         this.createdAt = createdAt;

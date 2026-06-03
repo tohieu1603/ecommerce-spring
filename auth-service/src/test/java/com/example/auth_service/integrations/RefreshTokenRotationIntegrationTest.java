@@ -1,4 +1,4 @@
-package com.example.auth_service;
+package com.example.auth_service.integrations;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.Test;
@@ -52,7 +52,7 @@ public class RefreshTokenRotationIntegrationTest extends AbstractIntegrationTest
 
     }
 
-        @Test
+    @Test
     void login_issuesNewFamilyStartingAtGenerationZero() {
         registerHandler.handle(new RegisterUserCommand(
                 "famuser", "fam@example.com", "P@ssw0rd123", "Fam", "User"));

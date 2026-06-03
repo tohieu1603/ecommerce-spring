@@ -28,18 +28,12 @@ import com.example.auth_service.domain.repositories.UserRepository;
 import com.example.auth_service.domain.services.PasswordEncodePort;
 import com.example.auth_service.domain.services.TokenDomainService;
 import com.example.auth_service.domain.services.TokenProviderPort;
-import com.example.auth_service.infrastructure.persistence.jpa.repositories.UserJpaRepository;
-
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class RegiterUserHandler implements CommandHandler<RegisterUserCommand, AuthResponseDTO>{
-
-    private final AssignRoleHandler assignRoleHandler;
-
-    private final UserJpaRepository userJpaRepository;
 
     private static final String DEFAULT_ROLE = "ROLE_USER";
     

@@ -21,18 +21,18 @@ public interface RefreshTokenJpaRepository extends JpaRepository<RefreshTokenJpa
     List<RefreshTokenJpaEntity> findByUserId(String userId);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    @Query("SELECT t FROM RefreshTokenEntity t WHERE t.token = :token")
+    @Query("SELECT t FROM RefreshTokenJpaEntity t WHERE t.token = :token")
     Optional<RefreshTokenJpaEntity> findByTokenForUpdate(@Param("token") String token);
 
-    @Query("SELECT t FROM RefreshTokenEntity t WHERE t.user.id = :userId AND t.revoked = false AND t.expiryDate > :now")
+    @Query("SELECT t FROM RefreshTokenJpaEntity t WHERE t.user.id = :userId AND t.revoked = false AND t.expiryDate > :now")
     List<RefreshTokenJpaEntity> findValidTokenByUserId(@Param("userId") String userId, @Param("now") Instant now);
 
     @Modifying
-    @Query("DELETE FROM RefreshTokenEntity t WHERE t.expiryDate < :now")
+    @Query("DELETE FROM RefreshTokenJpaEntity t WHERE t.expiryDate < :now")
     int deleteExpriedToken(@Param("now") Instant now);
 
     @Modifying
-    @Query("UPDATE RefreshTokenEntity t SET t.revoked = true, t.revokedAt = :now, t.reason = 'PASSWORD_CHANGED' WHERE t.user.id =:userId AND t.revoked = false")
+    @Query("UPDATE RefreshTokenJpaEntity t SET t.revoked = true, t.revokedAt = :now, t.revokedReason = 'PASSWORD_CHANGED' WHERE t.user.id =:userId AND t.revoked = false")
     void revokeAllTokenForUser(@Param("userId") String userId, @Param("now") Instant now);
 
     void deleteByUserId(String userId);

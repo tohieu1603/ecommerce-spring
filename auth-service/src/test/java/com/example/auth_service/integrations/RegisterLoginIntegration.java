@@ -1,7 +1,6 @@
-package com.example.auth_service;
+package com.example.auth_service.integrations;
 
-import static org.assertj.core.api.Assertions.*;
-
+import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.Test;
 
 import com.example.auth_service.application.commands.LoginCommand;

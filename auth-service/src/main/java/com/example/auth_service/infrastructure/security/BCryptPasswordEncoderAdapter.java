@@ -1,9 +1,11 @@
 package com.example.auth_service.infrastructure.security;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 
 import com.example.auth_service.domain.services.PasswordEncodePort;
 
+@Component
 public class BCryptPasswordEncoderAdapter implements PasswordEncodePort{
 
     private final PasswordEncoder delegate;

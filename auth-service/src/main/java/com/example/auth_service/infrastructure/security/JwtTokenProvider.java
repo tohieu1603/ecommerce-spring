@@ -12,6 +12,7 @@ import java.util.UUID;
 import javax.crypto.SecretKey;
 
 import com.example.auth_service.domain.models.user.User;
+import org.springframework.stereotype.Component;
 import com.example.auth_service.domain.services.TokenProviderPort;
 
 import io.jsonwebtoken.Claims;
@@ -36,6 +37,7 @@ import io.jsonwebtoken.security.MacAlgorithm;
  * <p>Refresh tokens are NOT JWTs — they are server-tracked opaque values managed by
  * the {@code RefreshToken} aggregate; this class only deals with access tokens.
  */
+@Component
 public class JwtTokenProvider implements TokenProviderPort{
     private static final MacAlgorithm ALGORITHM = Jwts.SIG.HS256;
 

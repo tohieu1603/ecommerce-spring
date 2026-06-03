@@ -10,8 +10,6 @@ import java.time.Instant;
 import java.util.List;
 
 public interface TokenRevocationJpaRepository extends JpaRepository<TokenRevocationJpaEntity, String> {
-    /** Returns true when a JWT jti is present in the blacklist (DB fallback path). */
-    boolean existsByTokenId(String tokenId);
 
     /**
      * Fetches all entries whose original token has not yet expired.
@@ -24,6 +22,6 @@ public interface TokenRevocationJpaRepository extends JpaRepository<TokenRevocat
      * Called by the scheduled cleanup job every hour.
      */
     @Modifying
-    @Query("DELETE FROM TokenRevocationEntity t WHERE t.expiresAt < :now")
+    @Query("DELETE FROM TokenRevocationJpaEntity t WHERE t.expiresAt < :now")
     void deleteByExpiresAtBefore(@Param("now") Instant now);
 }

@@ -1,14 +1,13 @@
-package com.example.auth_service;
+package com.example.auth_service.integrations;
 
 import java.time.Instant;
-
 import static org.assertj.core.api.Assertions.assertThat;
-
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired; // Đã thêm import này
 
 import com.example.auth_service.application.commands.RegisterUserCommand;
 import com.example.auth_service.application.common.CommandHandler;
@@ -23,15 +22,21 @@ import com.example.auth_service.interfaces.grpc.proto.VerifyTokenRequest;
 import com.example.auth_service.interfaces.grpc.proto.VerifyTokenResponse;
 
 import io.grpc.stub.StreamObserver;
-import lombok.RequiredArgsConstructor;
 
+public class AuthGrpcIntegrationTest extends AbstractIntegrationTest {
 
-@RequiredArgsConstructor
-public class AuthGrpcIntegrationTest extends AbstractIntegrationTest{
-    private final AuthGrpcService authGrpcService;
-    private final CommandHandler<RegisterUserCommand, AuthResponseDTO> registerHandler;
-    private final TokenProviderPort tokenProviderPort;
-    private final TokenBlacklistPort tokenBlacklistPort;
+    // Sử dụng @Autowired để Spring Boot tự động tiêm các Bean vào bài Test
+    @Autowired
+    private AuthGrpcService authGrpcService;
+
+    @Autowired
+    private CommandHandler<RegisterUserCommand, AuthResponseDTO> registerHandler;
+
+    @Autowired
+    private TokenProviderPort tokenProviderPort;
+
+    @Autowired
+    private TokenBlacklistPort tokenBlacklistPort;
 
 
     @Test
@@ -47,7 +52,6 @@ public class AuthGrpcIntegrationTest extends AbstractIntegrationTest{
         assertThat(response.getUsername()).isEqualTo("grpcuser");
         assertThat(response.getUserId()).isEqualTo(registered.user().id());
         assertThat(response.getRoleList()).isEqualTo("ROLE_USER");
-
     }
 
     @Test
@@ -97,7 +101,6 @@ public class AuthGrpcIntegrationTest extends AbstractIntegrationTest{
             capture(captured::set)
         );
     }
-
 
 
     private VerifyTokenResponse callVerify(String accessToken) {

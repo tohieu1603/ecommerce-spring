@@ -109,7 +109,6 @@ public class SecurityConfig {
         return config.getAuthenticationManager();
     }
 
-    /** Single source of truth for password hashing; {@code BCryptPasswordEncoderAdapter} delegates here. */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(12);

@@ -68,7 +68,7 @@ public class User extends AggregateRoot {
     public static User register(Username username, Email email, Password password,
                                 PersonName personName, PasswordEncodePort encoder) {
         Objects.requireNonNull(encoder, "encoder");
-        if(password.needsEncoding()) {
+        if(!password.needsEncoding()) {
             throw new IllegalArgumentException("register() requires a raw password");
         }
 

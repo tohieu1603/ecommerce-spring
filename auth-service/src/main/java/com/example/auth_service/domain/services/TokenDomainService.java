@@ -54,7 +54,7 @@ public class TokenDomainService {
     }
 
     /** Marks every live token in a family revoked with reason FAMILY_REVOKED. */
-    private void revokeFamily(TokenFamily family, RefreshTokenRepository repository) {
+    public void revokeFamily(TokenFamily family, RefreshTokenRepository repository) {
         repository.findByFamily(family).stream()
         .filter(t -> !t.isRevoke())
         .forEach(t -> {
