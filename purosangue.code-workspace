@@ -1,0 +1,46 @@
+{
+	"folders": [
+		{
+			"name": "eureka-server",
+			"path": "eureka-server"
+		},
+		{
+			"name": "api-gateway",
+			"path": "api-gateway"
+		},
+		{
+			"name": "auth-service",
+			"path": "auth-service"
+		},
+		{
+			"name": "catalog-service",
+			"path": "catalog-service"
+		},
+		{
+			"name": "common",
+			"path": "common"
+		},
+		{
+			"name": "root",
+			"path": "."
+		}
+	],
+	"settings": {
+		"java.configuration.updateBuildConfiguration": "automatic",
+		"java.import.maven.enabled": true,
+		"maven.executable.preferMavenWrapper": true,
+		"files.exclude": {
+			"**/target": true,
+			"**/.classpath": true,
+			"**/.project": true,
+			"**/.settings": true,
+			"**/.factorypath": true
+		}
+	},
+	"extensions": {
+		"recommendations": [
+			"vscjava.vscode-java-pack",
+			"vmware.vscode-boot-dev-pack"
+		]
+	}
+}
